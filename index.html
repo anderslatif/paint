@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+        }
+        #controls {
+            position: absolute;
+            width: fit-content;
+        }
+        #canvas {
+            z-index: -1;
+        }
+    </style>
+    <title>Paint</title>
+</head>
+<body>
+    <div id="controls">
+        <input id="controls-color" type="color">
+        <input id="controls-stroke-width" type="range" min="1" max="20">
+        <button id="controls-shortcuts-btn" onclick="shortcutsHandler.showShortcuts()">Shortcuts</button>
+        <div id="controls-display-shortcuts"></div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script src="./shortcutsHandler.js"></script>
+    <script src="./index.js"></script>
+</body>
+</html>
