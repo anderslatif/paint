@@ -48,16 +48,60 @@ const shortcutsHandler = {
             display.innerHTML = `
                 <p>CTRL-Z = UNDO</p>
                 <p>CTRL-X = REDO</p>
+                <p>M = Mute text on screen</p>
+                <p>
+                    <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/color_value'>
+                        [type a valid CSS color alias and Enter to clear]
+                    </a> = Change selected color
+                </p>
             `;
         }
     }
 }
 
+let isMuted = false;
+let typedCharacters = "";
+
 window.addEventListener('keydown', (event) => {
+    // undo and redo logic
     if (event.key === 'z' && event.metaKey) {
         shortcutsHandler.undo();        
     }
     if (event.key === 'x' && event.metaKey) {
         shortcutsHandler.redo();        
     }
-})
+
+    // typing colors logic
+    if (event.key.toLowerCase() === "m") {
+        isMuted = !isMuted;
+        if (isMuted) {
+            document.getElementById("controls-typed-text").textContent = "";
+        }
+    }
+
+    if (event.key === 'Enter') {
+        typedCharacters = "";
+    } else {
+        typedCharacters += event.key;
+    }
+    if (!isMuted) {
+        document.getElementById("controls-typed-text").textContent = typedCharacters;
+    }
+    changeColor(isColor(typedCharacters));
+});
+
+function isColor(typedCharacters) {
+    if (typedCharacters === "") {
+        return false;
+    } 
+    const style = new Option().style;
+    style.color = typedCharacters;
+    return style.color === typedCharacters;
+}
+
+function changeColor(willChange) {
+    if (!willChange) {
+        return;
+    }
+    document.getElementById("controls-color").value = typedCharacters;
+}
