@@ -49,9 +49,10 @@ const shortcutsHandler = {
                 <p>CTRL-Z = UNDO</p>
                 <p>CTRL-X = REDO</p>
                 <p>M = Mute text on screen</p>
+                                <p>Enter = Clear text</p>
                 <p>
                     <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/color_value'>
-                        [type a valid CSS color alias and Enter to clear]
+                        [type a valid CSS color (name, RGBA, Hex etc.)]
                     </a> = Change selected color
                 </p>
             `;
@@ -81,7 +82,8 @@ window.addEventListener('keydown', (event) => {
 
     if (event.key === 'Enter') {
         typedCharacters = "";
-    } else {
+    } else if (event.key !== "Meta" && event.key !== "Control" && event.key !== "Shift" 
+                && event.key !== "Alt" && event.key !== "Backspace") {
         typedCharacters += event.key;
     }
     if (!isMuted) {
@@ -103,5 +105,12 @@ function changeColor(willChange) {
     if (!willChange) {
         return;
     }
-    document.getElementById("controls-color").value = typedCharacters;
+    ctx.fillStyle = typedCharacters
+    const colorAsHex = ctx.fillStyle;
+    document.getElementById("controls-color").value = colorAsHex;
 }
+
+function convertColorToHex(newColor) {
+
+}
+
