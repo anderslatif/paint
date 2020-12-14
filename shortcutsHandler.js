@@ -82,7 +82,7 @@ window.addEventListener('keydown', (event) => {
 
     if (event.key === 'Enter') {
         typedCharacters = "";
-    } else if (event.key !== "Meta" && event.key !== "Control" && event.key !== "Shift" 
+    } else if (!event.metaKey && event.key !== "Meta" && event.key !== "Control" && event.key !== "Shift" 
                 && event.key !== "Alt" && event.key !== "Backspace") {
         typedCharacters += event.key;
     }
