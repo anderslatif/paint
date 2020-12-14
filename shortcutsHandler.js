@@ -92,7 +92,7 @@ window.addEventListener('keydown', (event) => {
     changeColor(isColor(typedCharacters));
 });
 
-function isColor(typedCharacters) {
+function isColor() {
     if (typedCharacters === "") {
         return false;
     } 
@@ -108,9 +108,8 @@ function changeColor(willChange) {
     ctx.fillStyle = typedCharacters
     const colorAsHex = ctx.fillStyle;
     document.getElementById("controls-color").value = colorAsHex;
+    typedCharacters = "";
+    document.getElementById("controls-typed-text").textContent = typedCharacters;
 }
 
-function convertColorToHex(newColor) {
-
-}
 
