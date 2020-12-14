@@ -55,6 +55,11 @@ const shortcutsHandler = {
                         [type a valid CSS color (name, RGBA, Hex etc.)]
                     </a> = Change selected color
                 </p>
+                <p>Additional color code shorthands</p>
+                <p>r = red</p>
+                <p>b = [blue, black]</p>
+                <p>p = [pink, purple]</p>
+                <p>g = [green, grey]</p>
             `;
         }
     }
@@ -65,51 +70,16 @@ let typedCharacters = "";
 
 window.addEventListener('keydown', (event) => {
     // undo and redo logic
-    if (event.key === 'z' && event.metaKey) {
+    if (event.key === 'z' && (event.metaKey || event.ctrlKey)) {
         shortcutsHandler.undo();        
     }
-    if (event.key === 'x' && event.metaKey) {
+    if (event.key === 'x' && (event.metaKey || event.ctrlKey)) {
         shortcutsHandler.redo();        
     }
 
     // typing colors logic
-    if (event.key.toLowerCase() === "m") {
-        isMuted = !isMuted;
-        if (isMuted) {
-            document.getElementById("controls-typed-text").textContent = "";
-        }
-    }
-
-    if (event.key === 'Enter') {
-        typedCharacters = "";
-    } else if (!event.metaKey && event.key !== "Meta" && event.key !== "Control" && event.key !== "Shift" 
-                && event.key !== "Alt" && event.key !== "Backspace") {
-        typedCharacters += event.key;
-    }
-    if (!isMuted) {
-        document.getElementById("controls-typed-text").textContent = typedCharacters;
-    }
-    changeColor(isColor(typedCharacters));
+    typedTextEventHandler(event);
 });
 
-function isColor() {
-    if (typedCharacters === "") {
-        return false;
-    } 
-    const style = new Option().style;
-    style.color = typedCharacters;
-    return style.color === typedCharacters;
-}
-
-function changeColor(willChange) {
-    if (!willChange) {
-        return;
-    }
-    ctx.fillStyle = typedCharacters
-    const colorAsHex = ctx.fillStyle;
-    document.getElementById("controls-color").value = colorAsHex;
-    typedCharacters = "";
-    document.getElementById("controls-typed-text").textContent = typedCharacters;
-}
-
-
+// disables going back on backspace
+window.onbeforeunload = () => {};
