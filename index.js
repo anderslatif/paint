@@ -21,6 +21,9 @@ function startPosition(event) {
 
 
 function paint(event) {
+    const x = event.clientX || event.touches[0].clientX;
+    const y = event.clientY || event.touches[0].clientY;
+
     if (!isPainting) return;
 
     const color = document.getElementById("controls-color").value;
@@ -29,19 +32,19 @@ function paint(event) {
     ctx.strokeStyle = color;
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round"
-    ctx.lineTo(event.clientX, event.clientY);
+    ctx.lineTo(x, y);
     ctx.stroke();
 
     dataPoints[dataPoints.length-1].push({
         color,
         lineWidth,
-        x: event.clientX,
-        y: event.clientY
+        x,
+        y
     });
 
     // this will ensure a smoother line (anti-aliasing) because of the lineCap = "round"
     ctx.beginPath();
-    ctx.moveTo(event.clientX, event.clientY);
+    ctx.moveTo(x, y);
 }
 
 function endPosition() {
