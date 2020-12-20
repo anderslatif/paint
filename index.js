@@ -51,3 +51,7 @@ function endPosition() {
 canvas.addEventListener('mousedown', startPosition);
 canvas.addEventListener('mousemove', paint);
 canvas.addEventListener('mouseup', endPosition);
+
+canvas.addEventListener('touchstart', startPosition);
+canvas.addEventListener('touchmove', paint);
+canvas.addEventListener('touchend', endPosition);
