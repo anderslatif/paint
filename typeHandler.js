@@ -25,7 +25,7 @@ function typedTextEventHandler(event) {
                 }
                 break;
             case 'p':               
-                if (currentColor === "#ffc0cb") {
+                if (currentColor === "#ff8da1") {
                     changeColorFromShorthand("#800080"); // purple
                 } else {
                     changeColorFromShorthand("#ff8da1"); // pink
