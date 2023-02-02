@@ -22,14 +22,15 @@
 <body>
     <div id="controls">
         <input id="controls-color" type="color">
-        <input id="controls-stroke-width" type="range" min="1" max="20">
-        <button id="controls-shortcuts-btn" onclick="shortcutsHandler.showShortcuts()">Shortcuts</button>
-        <div id="controls-display-shortcuts"></div>
+        <input id="controls-stroke-width" type="range" min="1" max="20" value="6">
+        <button id="controls-about-btn" onclick="shortcutsHandler.showAbout()">Shortcuts</button>
+        <div id="controls-display-about"></div>
         <span id="controls-typed-text"></span>
     </div>
 
     <canvas id="canvas"></canvas>
 
+    <script src="./textLabelHandler.js"></script>
     <script src="./typeHandler.js"></script>
     <script src="./shortcutsHandler.js"></script>
     <script src="./index.js"></script>
