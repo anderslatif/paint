@@ -4,13 +4,18 @@ const ctx = canvas.getContext('2d');
 let isPainting = false;
 const dataPoints = [];
 const deletedDataPoints = [];
+const canvases = [];
 
 window.addEventListener('load', () => {
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
+
+    ctx.font = "30px Arial";
 });
 
 function startPosition(event) {
+    if (isTextLabelMode) return;
+
     isPainting = true;
     dataPoints.push([]);
 
@@ -21,6 +26,8 @@ function startPosition(event) {
 
 
 function paint(event) {
+    if (isTextLabelMode) return;
+
     const x = event.clientX || event.touches[0].clientX;
     const y = event.clientY || event.touches[0].clientY;
 
@@ -48,6 +55,8 @@ function paint(event) {
 }
 
 function endPosition() {
+    if (isTextLabelMode) return;
+
     isPainting = false;
 }
 
@@ -58,3 +67,7 @@ canvas.addEventListener('mouseup', endPosition);
 canvas.addEventListener('touchstart', startPosition);
 canvas.addEventListener('touchmove', paint);
 canvas.addEventListener('touchend', endPosition);
+
+// text label handler
+// Escape and Enter are handled in the shortcutsHandler
+canvas.addEventListener('dblclick', handleDoubleClick);

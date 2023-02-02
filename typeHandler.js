@@ -1,41 +1,34 @@
 function typedTextEventHandler(event) {
-    if (event.key.toLowerCase() === "m") {
-        isMuted = !isMuted;
-        if (isMuted) {
-            document.getElementById("controls-typed-text").textContent = "";
-        }
-    }
 
-    const currentColor = document.getElementById("controls-color").value;
-    if (event.key === 'Enter') {
-        typedCharacters = "";
-        document.getElementById("controls-typed-text").textContent = typedCharacters;
-    }
 
     if (!event.metaKey && !event.ctrlKey && event.key !== "Meta" && event.key !== "Control" 
-        && event.key !== "Shift" && event.key !== "Alt" && event.key !== "Backspace" && event.key !== "Enter") {
+        && event.key !== "Shift" && event.key !== "Alt" && event.key !== "Backspace" && event.key !== "Enter" && event.key !== "Escape") {
+
+        const currentColor = document.getElementById("controls-color").value;
+
         
         typedCharacters += event.key.toLowerCase();
-        if (!isMuted) {
-            document.getElementById("controls-typed-text").textContent = typedCharacters;
-        }
+
 
         switch (typedCharacters) {
+            case 'w':
+                changeColorFromShorthand('#ffffff');
+                break;
             case 'r':
                 changeColorFromShorthand('#ff0000');
                 break;
-            case 'b':                 // black
+            case 'b':                 
                 if (currentColor === "#000000") {
                     changeColorFromShorthand("#0000ff"); // blue
                 } else {
                     changeColorFromShorthand("#000000"); // black
                 }
                 break;
-            case 'p':                // pink
+            case 'p':               
                 if (currentColor === "#ffc0cb") {
                     changeColorFromShorthand("#800080"); // purple
                 } else {
-                    changeColorFromShorthand("#ffc0cb"); // pink
+                    changeColorFromShorthand("#ff8da1"); // pink
                 }
                 break;
             case 'g':
@@ -48,7 +41,6 @@ function typedTextEventHandler(event) {
         }
     }
     
-    changeCssValidColor(isColor(typedCharacters));
 }
 
 function isColor() {

@@ -26,6 +26,11 @@ const shortcutsHandler = {
         ctx.beginPath();
     
         dataPoints.map(lineArray => {
+            if (lineArray.type === "textLabel") {
+                drawTextLabelFromDataPoints(lineArray);
+                return;
+            }
+
             const firstPointInLineArray = lineArray[0];
             ctx.moveTo(firstPointInLineArray.x, firstPointInLineArray.y);
     
@@ -40,26 +45,29 @@ const shortcutsHandler = {
         });
     },
     
-    showShortcuts: () =>  {
-        const display = document.getElementById("controls-display-shortcuts");
+    showAbout: () =>  {
+        const display = document.getElementById("controls-display-about");
         if (display.innerHTML) {
             display.innerHTML = "";
         } else {
             display.innerHTML = `
-                <p>CTRL-Z = UNDO</p>
-                <p>CTRL-X = REDO</p>
-                <p>M = Mute text on screen</p>
-                                <p>Enter = Clear text</p>
-                <p>
-                    <a href='https://developer.mozilla.org/en-US/docs/Web/CSS/color_value'>
-                        [type a valid CSS color (name, RGBA, Hex etc.)]
-                    </a> = Change selected color
-                </p>
-                <p>Additional color code shorthands</p>
-                <p>r = red</p>
-                <p>b = [blue, black]</p>
-                <p>p = [pink, purple]</p>
-                <p>g = [green, grey]</p>
+                <p>CMD-Z / CTRL-Z = UNDO</p>
+                <p>CMD-X / CTRL-X = REDO</p>
+                <br>
+                
+                <p>Color code shorthands</p>
+                <p>r = [red]</p>
+                <p>g = [green | grey]</p>
+                <p>b = [blue | black]</p>
+                <p>p = [pink | purple]</p>
+                <p>w = [white]</p>
+                <br>
+
+                <p>Text labels</p>
+                <p>Double click = add text label</p>
+                <p>Backspace = delete letter</p>
+                <p>Enter = save text label</p>
+                <p>Escape = cancel text label</p>
             `;
         }
     }
@@ -71,14 +79,32 @@ let typedCharacters = "";
 window.addEventListener('keydown', (event) => {
     // undo and redo logic
     if (event.key === 'z' && (event.metaKey || event.ctrlKey)) {
-        shortcutsHandler.undo();        
+        shortcutsHandler.undo();
     }
     if (event.key === 'x' && (event.metaKey || event.ctrlKey)) {
-        shortcutsHandler.redo();        
+        shortcutsHandler.redo();
     }
 
-    // typing colors logic
-    typedTextEventHandler(event);
+    // text label logic
+    if (event.key === 'Enter') {
+        handleEnterKeyDown();
+    }
+    if (event.key === 'Escape') {
+        handleEscapeKeyDown();
+    }
+    if (event.key === "Backspace") {
+        handleDeleteLetter();
+    }
+
+
+    if (isTextLabelMode && !(event.metaKey || event.ctrlKey || event.key === "Backspace" || event.key === "Enter")) {
+        handleAddLetter(event.key);
+    } else {
+        // typing colors logic
+        typedTextEventHandler(event);
+    }
+
+
 });
 
 // disables going back on backspace
