@@ -9,8 +9,6 @@ const canvases = [];
 window.addEventListener('load', () => {
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
-
-    ctx.font = "30px Arial";
 });
 
 function startPosition(event) {
@@ -71,3 +69,7 @@ canvas.addEventListener('touchend', endPosition);
 // text label handler
 // Escape and Enter are handled in the shortcutsHandler
 canvas.addEventListener('dblclick', handleDoubleClick);
+// IE9, Chrome, Safari, Opera
+canvas.addEventListener('mousewheel', handleMouseWheel);
+// Firefox
+canvas.addEventListener('DOMMouseScroll', handleMouseWheel);

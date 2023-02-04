@@ -2,17 +2,15 @@ let isTextLabelMode = false;
 let textLabelStartX = canvas.width / 2;
 let textLabelStartY = canvas.height / 2;
 let canvasRestoreImage;
+let fontSize = 30;
 
-// todo 
-// let isTextLabelMode = false;
-
-// let textLabelStartX = 0;
-// let textLabelStartY = 0;
 let letters = [];
 
 
 function handleDoubleClick(event) {
     if (isTextLabelMode) {
+        restorePreviousCanvas();
+        commitCanvas(true);
         return;
     }
 
@@ -20,8 +18,7 @@ function handleDoubleClick(event) {
 
     // to undo the dot painted from the first click and the double click
     dataPoints.pop();
-    // shortcutsHandler.undo();
-    // shortcutsHandler.undo();
+    dataPoints.pop();
 
     canvasRestoreImage = new Image();
     canvasRestoreImage.src = canvas.toDataURL();
@@ -33,7 +30,10 @@ function handleDoubleClick(event) {
     ctx.lineWidth = 1;
     
     // draw the initial border
-    ctx.strokeRect(textLabelStartX-10, textLabelStartY-25, 40, 30);
+    drawTextLabelBorder(true);
+    // ctx.strokeRect(textLabelStartX-10, textLabelStartY-25, 40, 30);
+
+    ctx.font = `${fontSize}px Arial`;
 }
 
 function handleAddLetter(letter) {
@@ -44,7 +44,6 @@ function handleAddLetter(letter) {
 }
 
 function handleDeleteLetter() {
-
     letters.pop();
 
     drawTextLabelBorder();
@@ -62,17 +61,52 @@ function drawTextLabelFromDataPoints(dataPoint) {
     ctx.setLineDash([]);
 }
 
-function drawTextLabelBorder() {
-    restorePreviousCanvas();
+function drawTextLabelBorder(isFirstTime) {
+    if (!isFirstTime) {
+        restorePreviousCanvas();
+    }
 
     ctx.fillStyle = document.getElementById("controls-color").value;
 
-    if (letters.length === 0) {
-        ctx.strokeRect(textLabelStartX-10, textLabelStartY-25, 40, 30);
-    } else {
-        const textDimensions = ctx.measureText(letters.join(""));
-        ctx.strokeRect(textLabelStartX-10, textLabelStartY-25, textDimensions.width+25, textDimensions.actualBoundingBoxAscent+10);
-    }
+
+    const padding = 10;
+
+
+    let textMetrics = letters.length === 0 ? 
+        ctx.measureText("X") : ctx.measureText(letters.join(""));
+
+    ctx.beginPath();
+    ctx.moveTo(
+        textLabelStartX - padding - textMetrics.actualBoundingBoxLeft,
+        textLabelStartY - padding - textMetrics.actualBoundingBoxAscent
+    );
+    ctx.lineTo(
+        textLabelStartX + padding + textMetrics.actualBoundingBoxRight, 
+        textLabelStartY - padding - textMetrics.actualBoundingBoxAscent
+    );
+    ctx.lineTo(
+        textLabelStartX + padding + textMetrics.actualBoundingBoxRight, 
+        textLabelStartY + padding + textMetrics.actualBoundingBoxDescent
+    );
+    ctx.lineTo(
+        textLabelStartX - padding - textMetrics.actualBoundingBoxLeft,
+        textLabelStartY + padding + textMetrics.actualBoundingBoxDescent
+    );
+    ctx.closePath();
+    ctx.stroke();
+    
+}
+
+function handleMouseWheel(event) {
+    if (!isTextLabelMode) return;
+
+    // detail is 1 if you scroll down and -1 if you scroll up
+    fontSize -= event.detail;
+
+    ctx.font = `${fontSize}px Arial`;
+
+    drawTextLabelBorder();
+    drawTextLabel();
 }
 
 function handleEscapeKeyDown() {
@@ -109,6 +143,9 @@ function commitCanvas(willCommit) {
 
     // solid line
     ctx.setLineDash([]);
+
+    fontSize = 30;
+    ctx.font = `${fontSize}px Arial`;
 
     letters = [];
 
