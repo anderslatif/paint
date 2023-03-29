@@ -96,8 +96,8 @@ window.addEventListener('keydown', (event) => {
         handleDeleteLetter();
     }
 
-
-    if (isTextLabelMode && !(event.metaKey || event.ctrlKey || event.key === "Backspace" || event.key === "Enter")) {
+    if (isTextLabelMode && (!event.metaKey && !event.ctrlKey && event.key !== "Meta" && event.key !== "Control" 
+        && event.key !== "Shift" && event.key !== "Alt" && event.key !== "Backspace" && event.key !== "Enter" && event.key !== "Escape")) {
         handleAddLetter(event.key);
     } else {
         // typing colors logic
